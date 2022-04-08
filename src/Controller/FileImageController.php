@@ -12,8 +12,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class FileImageController extends AbstractController {
 
     public function __invoke($imageName) {
-        $binaryFileResponse = new BinaryFileResponse(FileService::FILES_PATH . "/" . $imageName);
-
-        return $binaryFileResponse;
+        return new BinaryFileResponse(FileService::FILES_PATH . "/" . $imageName);
     }
 }

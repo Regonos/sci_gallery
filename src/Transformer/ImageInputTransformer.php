@@ -40,7 +40,7 @@ class ImageInputTransformer implements DataTransformerInterface {
             ->find($object->getAlbumId());
 
         if ($album == null) {
-            throw new \Exception("Cannot found album with id: " . $object->getAlbumId());
+            throw new \Exception("Cannot find album with id: " . $object->getAlbumId());
         }
 
         $photo->setAlbum($album);
