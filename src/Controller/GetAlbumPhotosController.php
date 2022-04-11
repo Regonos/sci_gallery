@@ -35,6 +35,11 @@ class GetAlbumPhotosController extends AbstractController
     }
 
 
+    /**
+     * @param Request $request
+     * @param $albumId
+     * @return JsonResponse
+     */
     public function __invoke(Request $request, $albumId)
     {
         $page = $request->query->get('page');
