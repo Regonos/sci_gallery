@@ -5,6 +5,7 @@ namespace App\Controller;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Validator\ValidatorInterface;
 use App\Entity\Photo;
+use App\Service\AlbumService;
 use App\Service\FileService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,23 +22,21 @@ use Symfony\Component\Validator\Constraints\Json;
 #[Route(path: "/api/albums/{albumId}/photos", name: "get_album_photos_controller")]
 class GetAlbumPhotosController extends AbstractController
 {
-
     const DEFAULT_PAGE = 0;
     const DEFAULT_ITEMS = 10;
 
-    private EntityManagerInterface $entityManager;
     private SerializerInterface $serializer;
+    private AlbumService $albumService;
 
-    public function __construct(SerializerInterface $serializer, EntityManagerInterface $entityManager)
+    public function __construct(SerializerInterface $serializer, AlbumService $albumService)
     {
-        $this->entityManager = $entityManager;
         $this->serializer = $serializer;
+        $this->albumService = $albumService;
     }
 
 
     public function __invoke(Request $request, $albumId)
     {
-
         $page = $request->query->get('page');
         $page = $page == null ? self::DEFAULT_PAGE : $page;
 
@@ -46,10 +45,7 @@ class GetAlbumPhotosController extends AbstractController
 
         $offset = $page * $items;
 
-        $photos = $this->entityManager
-            ->getRepository(Photo::class)
-            ->findBy(criteria: ['album' => $albumId], limit: $items, offset: $offset);
-
+        $photos = $this->albumService->getPhotosInAlbum($albumId, $items, $offset);
 
         return new JsonResponse($this->serializer->serialize($photos, JsonEncoder::FORMAT), Response::HTTP_OK, [], true);
     }

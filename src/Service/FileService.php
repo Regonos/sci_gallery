@@ -4,9 +4,6 @@ namespace App\Service;
 
 use Symfony\Component\Mime\MimeTypes;
 
-/**
- * @author Dawid Góra
- */
 class FileService {
 
     /** @var string */
